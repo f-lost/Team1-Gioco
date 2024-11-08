@@ -21,9 +21,9 @@ class Menù:
         self.utenti_registrati = {}
         # Inizialmente, il menù contiene solo l'opzione per la registrazione e l'uscita
         self.opzioni = [
-            ("-", "Registrati come nuovo utente"),
-            ("-", "Visualizza classifica"),
-            ("-", "Esci")
+            ("1", "Registrati come nuovo utente"),
+            ("2", "Visualizza classifica"),
+            ("3", "Esci")
         ]
 
     # Funzione che mostra il menù principale, nascondendo l'opzione "Inizia il gioco" prima della registrazione
@@ -171,8 +171,7 @@ class Classifica:
 
 class Gioco(ABC):
 
-    def init(self, nome):
-        self.nome = nome
+  
 
     @abstractmethod
     def calcola_punteggio(self):
@@ -181,8 +180,7 @@ class Gioco(ABC):
 
 class IndovinaIlNumero(Gioco):
 
-    def init(self):
-        super().init("Indovina il Numero")
+            
 
     def start(self, utente):
         numero_segreto = random.randint(1, 100)
@@ -228,8 +226,6 @@ class IndovinaIlNumero(Gioco):
 class IndovinaEquazioni(Gioco):
 
 
-    def init(self):
-        super().init("Indovina equazioni")
 
 
     def calcola_punteggio(self, utente, punteggio):
@@ -362,60 +358,13 @@ class IndovinaEquazioni(Gioco):
 #         print(f"\nIl vincitore è il Giocatore {self.giocatori[0]}!")
 
 
-# class SetteMezzo(Gioco):
-#     def __init__(self):
-#         super().__init__("Sette e Mezzo")
-#         self.mazzo = self.crea_mazzo()
-
-#     def crea_mazzo(self):
-# #         [1, 2, 3, 4, 5, 6, 7]: Questa lista rappresenta le carte numeriche da 1 a 7.
-
-# # * 4: Questo crea quattro copie di ciascuna carta numerica, 
-# # simulando un mazzo di carte con quattro semi (come denari, coppe, spade e bastoni).
-# # [0.5]: Questa lista contiene il valore 0.5, che rappresenta le carte figura (Re, Cavallo, Fante).
-
-# # * 12: Questo moltiplicatore crea dodici copie del valore 0.5, simulando tre figure per ciascuno dei quattro semi.
-#         carte = [1, 2, 3, 4, 5, 6, 7] * 4 + [0.5] * 12
-#         random.shuffle(carte)
-#         return carte
-#     #pop(): È un metodo delle liste in Python che rimuove e restituisce l'ultimo elemento della lista. 
-#     # In questo caso, rimuove e restituisce l'ultima carta del mazzo.
-#     def pesca_carta(self):
-#         return self.mazzo.pop()
-
-#     def start(self):
-#         print("Benvenuto a 7 e Mezzo!")
-#         punteggio_giocatore = 0
-#         punteggio_distributore_carte = 0
-
-#         # Turno del giocatore
-#         while True:
-#             carta = self.pesca_carta()
-#             punteggio_giocatore += carta
-#             print(f"Hai pescato una carta di valore {carta}. Punteggio totale: {punteggio_giocatore}")
-#             if punteggio_giocatore > 7.5:
-#                 print("Hai fallito! Il distributore_carte vince.")
-#                 return
-#             scelta = input("Vuoi pescare un'altra carta? (s/n): ")
-#             if scelta.lower() != 's':
-#                 break
-
-#         # Turno del distributore_carte
-#         while punteggio_distributore_carte < 5.5:
-#             carta = self.pesca_carta()
-#             punteggio_distributore_carte += carta
-#             print(f"Il distributore_carte ha pescato una carta di valore {carta}. Punteggio totale: {punteggio_distributore_carte}")
-
-#         # Determinazione del vincitore
-#         if punteggio_distributore_carte > 7.5 or punteggio_giocatore > punteggio_distributore_carte:
-#             print("Il giocatore vince!")
-#         else:
-#             print("Il distributore_carte vince!")
-
 class SetteMezzo(Gioco):
+
     def __init__(self):
-        super().__init__("Sette e Mezzo")
-        self.mazzo = self.crea_mazzo()
+        
+        carte = [1, 2, 3, 4, 5, 6, 7] * 4 + [0.5] * 12
+        self.mazzo = random.shuffle(carte)
+        
 
     def calcola_punteggio(self, utente, risultato):
 
@@ -429,7 +378,7 @@ class SetteMezzo(Gioco):
             print(f"Peccato {utente.get_name()}, perdi 5 punti!")
             utente.aggiungi_punti(-5)
 
-    def crea_mazzo(self):
+    # def crea_mazzo(self):
 #         [1, 2, 3, 4, 5, 6, 7]: Questa lista rappresenta le carte numeriche da 1 a 7.
 
 # * 4: Questo crea quattro copie di ciascuna carta numerica, 
@@ -478,11 +427,10 @@ class SetteMezzo(Gioco):
         
         self.calcola_punteggio(utente, risultato)
 
+
 class SassoCartaForbici(Gioco):
 
-    def __init__(self):
-        
-        super().__init__("Sasso, Carta o Forbici")
+   
     
 
     def calcola_punteggio(self, utente, risultato):
@@ -561,16 +509,16 @@ class SassoCartaForbici(Gioco):
 
 #test
 
-utente = Utente("stefano")
-classifica = Classifica()
-numeri = IndovinaIlNumero()
-numeri.start(utente)
-equazioni = IndovinaEquazioni()
-equazioni.start(utente)
-sette = SetteMezzo()
-sette.start(utente)
-sasso = SassoCartaForbici()
-sasso.start(utente)
+# utente = Utente("stefano")
+# classifica = Classifica()
+# numeri = IndovinaIlNumero()
+# numeri.start(utente)
+# equazioni = IndovinaEquazioni()
+# equazioni.start(utente)
+# sette = SetteMezzo()
+# sette.start(utente)
+# sasso = SassoCartaForbici()
+# sasso.start(utente)
 
 
 
@@ -591,3 +539,67 @@ sasso.start(utente)
     
 #     if scelta == "esci":
 #         break
+
+
+def main():
+    menu = Menù() 
+    classifica = Classifica()  
+    
+    #Dizionario di giochi disponibili
+    giochi_disponibili = {
+        "Indovina il Numero": IndovinaIlNumero(),
+        "Indovina Equazioni": IndovinaEquazioni(),
+        "Sette e Mezzo": SetteMezzo(),
+        "Sasso, Carta o Forbici": SassoCartaForbici()
+    }
+    
+    #Esegui il ciclo principale del menù
+    while True:
+        menu.mostra_menù()  
+        scelta = menu.scegli_opzione()  #Scelta dell'utente
+        
+        if scelta == "esci":
+            break 
+            
+        #Se l'utente è registrato, permette di iniziare il gioco
+        if menu.registrato:
+            utente = Utente(menu.utenti_registrati)  #Crea l'utente (usa l'username dal menù)
+            
+            
+            #Mostra l'elenco dei giochi in base ai punti
+            punti = utente.get_punteggio()
+            print(f"Il tuo punteggio attuale è {punti}.Puoi giocare a queste funzionalità:")
+            
+            #Se l'utente ha meno di 1 punto, può giocare solo a uno
+            if punti == 0:
+                print("Puoi giocare solo a 'Indovina il Numero'.")
+                giochi_disponibili["Indovina il Numero"].start(utente)
+            else:
+                #Mostra le funzionalità disponibili in base al punteggio
+                giochi_accessibili = []
+                for i in range(punti + 1):
+                    giochi_accessibili.append(list(giochi_disponibili.values())[i])
+                print("Giochi disponibili:")
+                for gioco in giochi_accessibili:
+                    print(f"- {gioco.nome}")
+                
+                #Chiedi all'utente quale gioco vuole fare
+                scelta_gioco = input("Scegli un gioco da iniziare: ")
+                
+                if scelta_gioco in giochi_disponibili:
+                    gioco = giochi_disponibili[scelta_gioco]
+                    gioco.start(utente)
+                    #Aggiorna la classifica con il punteggio dell'utente
+                    classifica.aggiungi_a_classifica(utente, utente.get_punteggio())
+                    classifica.salva_classifica()  #Salva la classifica aggiornata
+                else:
+                    print("Gioco non disponibile. Riprova.")
+        
+        else:
+            print("Devi registrarti prima di iniziare a giocare.")
+            #Registrazione
+            menu.registrazione_utente()
+
+
+
+main()
