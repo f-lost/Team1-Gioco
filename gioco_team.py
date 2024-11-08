@@ -148,6 +148,11 @@ class Classifica:
 
         pprint.pprint(self.__get_classifica())
 
+    def salva_classifica(self):
+
+        pass
+
+
 
 class Gioco(ABC):
 
@@ -158,6 +163,7 @@ class Gioco(ABC):
     def calcola_punteggio(self):
         pass
  
+
 class IndovinaIlNumero(Gioco):
 
     def init(self):
@@ -202,6 +208,140 @@ class IndovinaIlNumero(Gioco):
 
             utente.aggiungi_punti(5)
             print("Potevi fare di meglio... 5 punti per te!")
+
+
+class IndovinaEquazioni(Gioco):
+
+
+    def init(self):
+        super().init("Indovina equazioni")
+
+    def start(self, nome_utente):
+        print(f"Ciao {nome_utente}! In questo gioco dovrai risolvere un'equazione di primo grado. Se il risultato è con la virgola approssima alle prime due cifre significative! FAI VELOCE!")
+
+        a = 0
+        while a == 0:
+            a = random.randint(-10,10)
+
+        b = random.randint(-100, 100)
+
+        print(f"Risolvi l'equazione {a}x + {b} = 0 \n")
+
+        sol = round(-b/a, 2)
+
+        while True:
+            t1 = time.time()
+            #print(sol)
+            x = float(input("Qual è la tua soluzione? "))
+            x=round(x, 2)
+
+            punteggio = time.time() - t1
+            punteggio = round(punteggio, 3)
+            if x  == sol:
+                print(nome_utente, "ci hai messo ", punteggio, " secondi per completarlo!")
+                break
+            else:
+                print("Ritenta!")
+
+        return punteggio
+
+
+class Saltacavallo(Gioco):
+    def __init__(self):
+        super().__init__("Saltacavallo")
+        self.giocatori = []
+        self.vite = []
+    # distribuisci_carte: Questo metodo crea un mazzo di carte 
+    # (numeri da 2 a 13, dove 11 è il Fante, 12 è il Cavallo e 13 è il Re) e lo mescola. 
+    # Distribuisce una carta a ciascun giocatore.
+    def distribuisci_carte(self):
+        mazzo = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13] * 4  # 
+        random.shuffle(mazzo)
+        return [mazzo.pop() for _ in range(len(self.giocatori))]
+#     start: Questo metodo gestisce il flusso del gioco. Chiede il numero di giocatori, 
+# inizializza le vite e distribuisce le carte. 
+# Ogni giocatore esegue azioni basate sul valore della carta ricevuta:
+
+# Carte da 2 a 7: Nessuna azione.
+
+# Cavallo (11): Dona una vita al secondo giocatore alla destra.
+
+# Fante (12): Dona una vita al giocatore alla sinistra.
+
+# Re (13): Aggiunge una vita al giocatore.
+
+# Asso (1): Perde una vita.
+
+
+    def start(self):
+
+        num_giocatori = int(input("Quanti giocatori partecipano? "))
+        self.giocatori = list(range(1, num_giocatori + 1))
+        self.vite = [2] * num_giocatori  # Ogni giocatore inizia con 2 vite
+
+        while len(self.giocatori) > 1:
+            carte = self.distribuisci_carte()
+            print("\nCarte distribuite:")
+            for i, carta in enumerate(carte):
+                print(f"Giocatore {self.giocatori[i]} ha ricevuto una carta di valore {carta}")
+             # Carte da 2 a 7: Nessuna azione.
+            for i, carta in enumerate(carte):
+                if 2 <= carta <= 7:
+                    continue
+               
+                # Cavallo (11): Dona una vita al secondo giocatore alla destra.
+                elif carta == 11:  # Cavallo
+                    destinatario = (i - 2) % len(self.giocatori)
+                    self.vite[destinatario] += 1
+                    self.vite[i] -= 1
+                    # Fante (12): Dona una vita al giocatore alla sinistra.
+                elif carta == 12:  # Fante
+                    # (i - 2) % len(self.giocatori): Questo calcolo determina
+                    # l'indice del secondo giocatore alla destra del giocatore corrente. 
+                    # L'operatore % (modulo) assicura che l'indice rimanga 
+                    # all'interno dei limiti della lista, gestendo correttamente i casi in cui i - 2 risulti negativo.
+                    destinatario = (i + 1) % len(self.giocatori)
+                    self.vite[destinatario] += 1
+                    self.vite[i] -= 1
+                    # Re (13): Aggiunge una vita al giocatore.
+                elif carta == 13:  # Re
+                    self.vite[i] += 1
+                    # Asso (1): Perde una vita.
+                elif carta == 1:  # Asso
+                    self.vite[i] -= 1
+            #zip(self.giocatori, self.vite): Combina le liste self.giocatori e self.vite in coppie (giocatore, vite).
+
+             # [g for g, v in zip(self.giocatori, self.vite) if v > 0]: Crea una nuova lista di giocatori (g) che hanno ancora vite (v > 0). 
+             # In altre parole, rimuove i giocatori che non hanno più vite.
+            self.giocatori = [g for g, v in zip(self.giocatori, self.vite) if v > 0]
+            self.vite = [v for v in self.vite if v > 0]
+
+            print("\nStato delle vite:")
+            for i, vite in enumerate(self.vite):
+                print(f"Giocatore {self.giocatori[i]} ha {vite} vite")
+
+        print(f"\nIl vincitore è il Giocatore {self.giocatori[0]}!")
+
+
+class SassoCartaForbici(Gioco):
+
+    def __init__(self):
+        
+        super().__init__("Sasso, Carta o Forbici")
+    
+    def start(self, utente):
+
+        possibili_scelte_pc = {"Sasso", "Carta", "Forbici"}
+        print("Benvenuto a 'Sasso, Carta o Forbici'!")
+
+        while True:
+
+            scelta_casuale_pc = random.choice(possibili_scelte_pc)
+            scelta_utente = input("Cosa vuoi fare? Sasso, Carta o Forbice?:  ").lower()
+
+            pass
+
+
 
 
 
