@@ -144,20 +144,20 @@ class Classifica:
 
         return self.__classifica
     
-    def __set_classifica(self, utente, valore):
+    def __set_classifica(self, utente):
 
         if utente in self.__classifica:
 
-            self.__classifica[utente.get_nome()].append(valore)
+            self.__classifica[utente.get_nome()].append(utente.get_punteggio())
 
         else:
 
             print("Ora sei in classifica!")
-            self.__classifica[utente.get_nome()] = [valore]
+            self.__classifica[utente.get_nome()] = [utente.get_punteggio()]
         
-    def aggiungi_a_classifica(self, utente, valore):
+    def aggiungi_a_classifica(self, utente):
 
-        self.__set_classifica(utente, valore)
+        self.__set_classifica(utente)
 
     def stampa_classifica(self):
 
@@ -231,8 +231,32 @@ class IndovinaEquazioni(Gioco):
     def init(self):
         super().init("Indovina equazioni")
 
-    def start(self, nome_utente):
-        print(f"Ciao {nome_utente}! In questo gioco dovrai risolvere un'equazione di primo grado. Se il risultato è con la virgola approssima alle prime due cifre significative! FAI VELOCE!")
+
+    def calcola_punteggio(self, utente, punteggio):
+        
+        if punteggio <= 20:
+
+            print("BRAVISSIMO! 100 punti per te!")
+            utente.aggiungi_punti(100)
+                
+        elif 20 < punteggio <= 100:
+
+            print("Bravo! 50 punti per te!")
+            utente.aggiungi_punti(50)
+
+        elif 100 < punteggio <= 200:
+
+            print("Bene! 25 punti per te!")
+            utente.aggiungi_punti(25)
+
+        else:
+
+            print("Insomma... 55 punti per te!")
+            utente.aggiungi_punti(5)
+
+
+    def start(self, utente):
+        print(f"Ciao {utente.get_nome()}! In questo gioco dovrai risolvere un'equazione di primo grado. Se il risultato è con la virgola approssima alle prime due cifre significative! FAI VELOCE!")
 
         a = 0
         while a == 0:
@@ -253,12 +277,12 @@ class IndovinaEquazioni(Gioco):
             punteggio = time.time() - t1
             punteggio = round(punteggio, 3)
             if x  == sol:
-                print(nome_utente, "ci hai messo ", punteggio, " secondi per completarlo!")
+                print(utente.get_nome(), "ci hai messo ", punteggio, " secondi per completarlo!")
                 break
             else:
                 print("Ritenta!")
 
-        return punteggio
+        self.calcola_punteggio(utente, punteggio)
 
 
 class Saltacavallo(Gioco):
