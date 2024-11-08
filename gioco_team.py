@@ -285,87 +285,149 @@ class IndovinaEquazioni(Gioco):
         self.calcola_punteggio(utente, punteggio)
 
 
-class Saltacavallo(Gioco):
-    def __init__(self):
-        super().__init__("Saltacavallo")
-        self.giocatori = []
-        self.vite = []
-    # distribuisci_carte: Questo metodo crea un mazzo di carte 
-    # (numeri da 2 a 13, dove 11 è il Fante, 12 è il Cavallo e 13 è il Re) e lo mescola. 
-    # Distribuisce una carta a ciascun giocatore.
-    def distribuisci_carte(self):
-        mazzo = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13] * 4  # 
-        random.shuffle(mazzo)
-        return [mazzo.pop() for _ in range(len(self.giocatori))]
-#     start: Questo metodo gestisce il flusso del gioco. Chiede il numero di giocatori, 
-# inizializza le vite e distribuisce le carte. 
-# Ogni giocatore esegue azioni basate sul valore della carta ricevuta:
+# class Saltacavallo(Gioco):
+#     def __init__(self):
+#         super().__init__("Saltacavallo")
+#         self.giocatori = []
+#         self.vite = []
+#     # distribuisci_carte: Questo metodo crea un mazzo di carte 
+#     # (numeri da 2 a 13, dove 11 è il Fante, 12 è il Cavallo e 13 è il Re) e lo mescola. 
+#     # Distribuisce una carta a ciascun giocatore.
+#     def distribuisci_carte(self):
+#         mazzo = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13] * 4  # 
+#         random.shuffle(mazzo)
+#         return [mazzo.pop() for _ in range(len(self.giocatori))]
+# #     start: Questo metodo gestisce il flusso del gioco. Chiede il numero di giocatori, 
+# # inizializza le vite e distribuisce le carte. 
+# # Ogni giocatore esegue azioni basate sul valore della carta ricevuta:
 
-# Carte da 2 a 7: Nessuna azione.
+# # Carte da 2 a 7: Nessuna azione.
 
-# Cavallo (11): Dona una vita al secondo giocatore alla destra.
+# # Cavallo (11): Dona una vita al secondo giocatore alla destra.
 
-# Fante (12): Dona una vita al giocatore alla sinistra.
+# # Fante (12): Dona una vita al giocatore alla sinistra.
 
-# Re (13): Aggiunge una vita al giocatore.
+# # Re (13): Aggiunge una vita al giocatore.
 
-# Asso (1): Perde una vita.
+# # Asso (1): Perde una vita.
 
 
-    def start(self):
+#     def start(self):
 
-        num_giocatori = int(input("Quanti giocatori partecipano? "))
-        self.giocatori = list(range(1, num_giocatori + 1))
-        self.vite = [2] * num_giocatori  # Ogni giocatore inizia con 2 vite
+#         num_giocatori = int(input("Quanti giocatori partecipano? "))
+#         self.giocatori = list(range(1, num_giocatori + 1))
+#         self.vite = [2] * num_giocatori  # Ogni giocatore inizia con 2 vite
 
-        while len(self.giocatori) > 1:
-            carte = self.distribuisci_carte()
-            print("\nCarte distribuite:")
-            for i, carta in enumerate(carte):
-                print(f"Giocatore {self.giocatori[i]} ha ricevuto una carta di valore {carta}")
-             # Carte da 2 a 7: Nessuna azione.
-            for i, carta in enumerate(carte):
-                if 2 <= carta <= 7:
-                    continue
+#         while len(self.giocatori) > 1:
+#             carte = self.distribuisci_carte()
+#             print("\nCarte distribuite:")
+#             for i, carta in enumerate(carte):
+#                 print(f"Giocatore {self.giocatori[i]} ha ricevuto una carta di valore {carta}")
+#              # Carte da 2 a 7: Nessuna azione.
+#             for i, carta in enumerate(carte):
+#                 if 2 <= carta <= 7:
+#                     continue
                
-                # Cavallo (11): Dona una vita al secondo giocatore alla destra.
-                elif carta == 11:  # Cavallo
-                    destinatario = (i - 2) % len(self.giocatori)
-                    self.vite[destinatario] += 1
-                    self.vite[i] -= 1
-                    # Fante (12): Dona una vita al giocatore alla sinistra.
-                elif carta == 12:  # Fante
-                    # (i - 2) % len(self.giocatori): Questo calcolo determina
-                    # l'indice del secondo giocatore alla destra del giocatore corrente. 
-                    # L'operatore % (modulo) assicura che l'indice rimanga 
-                    # all'interno dei limiti della lista, gestendo correttamente i casi in cui i - 2 risulti negativo.
-                    destinatario = (i + 1) % len(self.giocatori)
-                    self.vite[destinatario] += 1
-                    self.vite[i] -= 1
-                    # Re (13): Aggiunge una vita al giocatore.
-                elif carta == 13:  # Re
-                    self.vite[i] += 1
-                    # Asso (1): Perde una vita.
-                elif carta == 1:  # Asso
-                    self.vite[i] -= 1
-            #zip(self.giocatori, self.vite): Combina le liste self.giocatori e self.vite in coppie (giocatore, vite).
+#                 # Cavallo (11): Dona una vita al secondo giocatore alla destra.
+#                 elif carta == 11:  # Cavallo
+#                     destinatario = (i - 2) % len(self.giocatori)
+#                     self.vite[destinatario] += 1
+#                     self.vite[i] -= 1
+#                     # Fante (12): Dona una vita al giocatore alla sinistra.
+#                 elif carta == 12:  # Fante
+#                     # (i - 2) % len(self.giocatori): Questo calcolo determina
+#                     # l'indice del secondo giocatore alla destra del giocatore corrente. 
+#                     # L'operatore % (modulo) assicura che l'indice rimanga 
+#                     # all'interno dei limiti della lista, gestendo correttamente i casi in cui i - 2 risulti negativo.
+#                     destinatario = (i + 1) % len(self.giocatori)
+#                     self.vite[destinatario] += 1
+#                     self.vite[i] -= 1
+#                     # Re (13): Aggiunge una vita al giocatore.
+#                 elif carta == 13:  # Re
+#                     self.vite[i] += 1
+#                     # Asso (1): Perde una vita.
+#                 elif carta == 1:  # Asso
+#                     self.vite[i] -= 1
+#             #zip(self.giocatori, self.vite): Combina le liste self.giocatori e self.vite in coppie (giocatore, vite).
 
-             # [g for g, v in zip(self.giocatori, self.vite) if v > 0]: Crea una nuova lista di giocatori (g) che hanno ancora vite (v > 0). 
-             # In altre parole, rimuove i giocatori che non hanno più vite.
-            self.giocatori = [g for g, v in zip(self.giocatori, self.vite) if v > 0]
-            self.vite = [v for v in self.vite if v > 0]
+#              # [g for g, v in zip(self.giocatori, self.vite) if v > 0]: Crea una nuova lista di giocatori (g) che hanno ancora vite (v > 0). 
+#              # In altre parole, rimuove i giocatori che non hanno più vite.
+#             self.giocatori = [g for g, v in zip(self.giocatori, self.vite) if v > 0]
+#             self.vite = [v for v in self.vite if v > 0]
 
-            print("\nStato delle vite:")
-            for i, vite in enumerate(self.vite):
-                print(f"Giocatore {self.giocatori[i]} ha {vite} vite")
+#             print("\nStato delle vite:")
+#             for i, vite in enumerate(self.vite):
+#                 print(f"Giocatore {self.giocatori[i]} ha {vite} vite")
 
-        print(f"\nIl vincitore è il Giocatore {self.giocatori[0]}!")
+#         print(f"\nIl vincitore è il Giocatore {self.giocatori[0]}!")
 
+
+# class SetteMezzo(Gioco):
+#     def __init__(self):
+#         super().__init__("Sette e Mezzo")
+#         self.mazzo = self.crea_mazzo()
+
+#     def crea_mazzo(self):
+# #         [1, 2, 3, 4, 5, 6, 7]: Questa lista rappresenta le carte numeriche da 1 a 7.
+
+# # * 4: Questo crea quattro copie di ciascuna carta numerica, 
+# # simulando un mazzo di carte con quattro semi (come denari, coppe, spade e bastoni).
+# # [0.5]: Questa lista contiene il valore 0.5, che rappresenta le carte figura (Re, Cavallo, Fante).
+
+# # * 12: Questo moltiplicatore crea dodici copie del valore 0.5, simulando tre figure per ciascuno dei quattro semi.
+#         carte = [1, 2, 3, 4, 5, 6, 7] * 4 + [0.5] * 12
+#         random.shuffle(carte)
+#         return carte
+#     #pop(): È un metodo delle liste in Python che rimuove e restituisce l'ultimo elemento della lista. 
+#     # In questo caso, rimuove e restituisce l'ultima carta del mazzo.
+#     def pesca_carta(self):
+#         return self.mazzo.pop()
+
+#     def start(self):
+#         print("Benvenuto a 7 e Mezzo!")
+#         punteggio_giocatore = 0
+#         punteggio_distributore_carte = 0
+
+#         # Turno del giocatore
+#         while True:
+#             carta = self.pesca_carta()
+#             punteggio_giocatore += carta
+#             print(f"Hai pescato una carta di valore {carta}. Punteggio totale: {punteggio_giocatore}")
+#             if punteggio_giocatore > 7.5:
+#                 print("Hai fallito! Il distributore_carte vince.")
+#                 return
+#             scelta = input("Vuoi pescare un'altra carta? (s/n): ")
+#             if scelta.lower() != 's':
+#                 break
+
+#         # Turno del distributore_carte
+#         while punteggio_distributore_carte < 5.5:
+#             carta = self.pesca_carta()
+#             punteggio_distributore_carte += carta
+#             print(f"Il distributore_carte ha pescato una carta di valore {carta}. Punteggio totale: {punteggio_distributore_carte}")
+
+#         # Determinazione del vincitore
+#         if punteggio_distributore_carte > 7.5 or punteggio_giocatore > punteggio_distributore_carte:
+#             print("Il giocatore vince!")
+#         else:
+#             print("Il distributore_carte vince!")
 
 class SetteMezzo(Gioco):
     def __init__(self):
         super().__init__("Sette e Mezzo")
         self.mazzo = self.crea_mazzo()
+
+    def calcola_punteggio(self, utente, risultato):
+
+        if risultato == True:
+
+            print(f"Bravo {utente.get_name()}, guadagni 20 punti!")
+            utente.aggiungi_punti(20)
+        
+        else:
+            
+            print(f"Peccato {utente.get_name()}, perdi 5 punti!")
+            utente.aggiungi_punti(-5)
 
     def crea_mazzo(self):
 #         [1, 2, 3, 4, 5, 6, 7]: Questa lista rappresenta le carte numeriche da 1 a 7.
@@ -383,7 +445,7 @@ class SetteMezzo(Gioco):
     def pesca_carta(self):
         return self.mazzo.pop()
 
-    def start(self):
+    def start(self, utente):
         print("Benvenuto a 7 e Mezzo!")
         punteggio_giocatore = 0
         punteggio_distributore_carte = 0
@@ -394,7 +456,7 @@ class SetteMezzo(Gioco):
             punteggio_giocatore += carta
             print(f"Hai pescato una carta di valore {carta}. Punteggio totale: {punteggio_giocatore}")
             if punteggio_giocatore > 7.5:
-                print("Hai fallito! Il distributore_carte vince.")
+                print("Hai fallito! Il computer vince.")
                 return
             scelta = input("Vuoi pescare un'altra carta? (s/n): ")
             if scelta.lower() != 's':
@@ -404,14 +466,17 @@ class SetteMezzo(Gioco):
         while punteggio_distributore_carte < 5.5:
             carta = self.pesca_carta()
             punteggio_distributore_carte += carta
-            print(f"Il distributore_carte ha pescato una carta di valore {carta}. Punteggio totale: {punteggio_distributore_carte}")
+            print(f"Il computer ha pescato una carta di valore {carta}. Punteggio totale: {punteggio_distributore_carte}")
 
         # Determinazione del vincitore
         if punteggio_distributore_carte > 7.5 or punteggio_giocatore > punteggio_distributore_carte:
             print("Il giocatore vince!")
-        else:
-            print("Il distributore_carte vince!")
+            risultato = True
 
+        else:
+            print("Il computer vince!")
+        
+        self.calcola_punteggio(utente, risultato)
 
 class SassoCartaForbici(Gioco):
 
@@ -492,6 +557,20 @@ class SassoCartaForbici(Gioco):
 
 
 
+
+
+#test
+
+utente = Utente("stefano")
+classifica = Classifica()
+numeri = IndovinaIlNumero()
+numeri.start(utente)
+equazioni = IndovinaEquazioni()
+equazioni.start(utente)
+sette = SetteMezzo()
+sette.start(utente)
+sasso = SassoCartaForbici()
+sasso.start(utente)
 
 
 
