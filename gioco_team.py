@@ -13,9 +13,75 @@ classifica salvata
 '''
 
 from abc import ABC, abstractmethod
-import pprint, random, time
+import pprint, random, time, json
 
 class Menù:
+    def __init__(self):
+        self.registrato = False
+        self.utenti_registrati = {}
+        self.opzioni = {
+            "1 -": "Registrati come nuovo utente",
+            "2 -": "Inizia il gioco",   
+            "3 -": "Visualizza classifica",
+            "4 -": "Esci"
+            }
+
+    #Funzione che mostra il menù principale, nascondendo la seconda opzione se non registrato
+    def mostra_menù(self):
+        print("\ Menù Principale /")
+        for key, value in self.opzioni.items():
+            if key == "2" and not self.registrato:
+                continue
+            print(f"{key} {value}")
+
+    #Funzione di scelta dell'opzione del menù, se non si è registrati, printa che bisogna farlo
+    def scegli_opzione(self):
+        scelta = input("Scegli un'opzione dal Menù: ")
+        if scelta == "1":
+            self.registrazione_utente()
+        elif scelta == "2":
+            if not self.registrato:
+                print("Devi registrarti prima di iniziare il gioco")
+            else:
+                print("Inizio del gioco..")
+        elif scelta == "3":
+            print(self.stampa_classifica())
+        elif scelta == "4":
+            print("Uscita dal gioco. Arrivederci!")
+            return "esci"
+        else:
+            print("Opzione non valida. Riprova.")
+        return None
+    
+    #Funzione registrazione dell'utente con scelta dell'username e motto del giocatore
+    def registrazione_utente(self):
+        print("Registrazione in corso...")
+        time.sleep(2)
+
+        while True:
+            username = input("Scegli il tuo username: ").lower()
+            if not username:
+                print("Devi necessariamente inserire un username. Riprova.")
+            elif username in self.utenti_registrati:
+                print("Questo username è già presente, scegline un altro.")
+            else:
+                break
+
+        punchline = input("Scegli un tuo motto personale: ").lower()
+        if not punchline:
+            punchline = "Non hai inserito nessun motto, peccato."
+
+        print("Salvataggio delle informazioni")
+        time.sleep(2)
+
+        self.utenti_registrati[username] = punchline
+        self.registrato = True
+
+        print("Registrazione completata")
+        time.sleep(1)
+        print(f"Benvenuto giocatore {username}, il tuo motto è: {punchline}, ti auguro buona fortuna!")
+
+ 
     def init(self):
         self.registrato = False
         self.utenti_registrati = {}
@@ -123,7 +189,9 @@ class Classifica:
 
     def __init__(self):
 
-        self.__classifica = {}
+        with open("classifica.json", "r") as file:
+            self.__classifica = json.load(file)
+            
 
     def __get_classifica(self):
 
@@ -150,7 +218,9 @@ class Classifica:
 
     def salva_classifica(self):
 
-        pass
+        with open("dizionario.json", "w") as file:
+            json.dump(self.__get_classifica(), file, indent=4)
+
 
 
 
@@ -352,8 +422,6 @@ gioco1 = IndovinaIlNumero()
 utente = Utente("stefano")
 classifica = Classifica()
 gioco1.start(utente)
-
-
 
 
         
