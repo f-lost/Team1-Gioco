@@ -19,44 +19,45 @@ class Menù:
     def __init__(self):
         self.registrato = False
         self.utenti_registrati = {}
-        self.opzioni = {
-            "1 -": "Registrati come nuovo utente",
-            "2 -": "Inizia il gioco",   
-            "3 -": "Visualizza classifica",
-            "4 -": "Esci"
-            }
+        # Inizialmente, il menù contiene solo l'opzione per la registrazione e l'uscita
+        self.opzioni = [
+            ("-", "Registrati come nuovo utente"),
+            ("-", "Visualizza classifica"),
+            ("-", "Esci")
+        ]
 
-    #Funzione che mostra il menù principale, nascondendo la seconda opzione se non registrato
+    # Funzione che mostra il menù principale, nascondendo l'opzione "Inizia il gioco" prima della registrazione
     def mostra_menù(self):
-        print("\ Menù Principale /")
-        for key, value in self.opzioni.items():
-            if key == "2" and not self.registrato:
-                continue
-            print(f"{key} {value}")
+        print("\n=== Menù Principale ===")
+        for key, value in self.opzioni:
+            print(f"{key} - {value}")
 
-    #Funzione di scelta dell'opzione del menù, se non si è registrati, printa che bisogna farlo
+    # Funzione di scelta dell'opzione del menù, se non si è registrati, printa che bisogna farlo
     def scegli_opzione(self):
-        scelta = input("Scegli un'opzione dal Menù: ")
-        if scelta == "1":
-            self.registrazione_utente()
-        elif scelta == "2":
-            if not self.registrato:
-                print("Devi registrarti prima di iniziare il gioco")
+        while True:
+            scelta = input("Scegli un'opzione dal Menù: ")
+            if scelta == "1":
+                self.registrazione_utente()
+                break  #Esce dal loop dopo la registrazione
+            elif scelta == "2":
+                if not self.registrato:
+                    print("Devi registrarti prima di iniziare il gioco.")
+                else:
+                    print("Inizio del gioco...")
+                    break
+            elif scelta == "3":
+                self.visualizza_classifica()  
+                break
+            elif scelta == "4":
+                print("Uscita dal gioco... Arrivederci!")
+                return "esci"  
             else:
-                print("Inizio del gioco..")
-        elif scelta == "3":
-            print(self.stampa_classifica())
-        elif scelta == "4":
-            print("Uscita dal gioco. Arrivederci!")
-            return "esci"
-        else:
-            print("Opzione non valida. Riprova.")
-        return None
-    
-    #Funzione registrazione dell'utente con scelta dell'username e motto del giocatore
+                print("Opzione non valida. Riprova.") 
+
+    # Funzione di registrazione dell'utente con scelta dell'username e motto del giocatore
     def registrazione_utente(self):
         print("Registrazione in corso...")
-        time.sleep(2)
+        time.sleep(1)
 
         while True:
             username = input("Scegli il tuo username: ").lower()
@@ -71,73 +72,18 @@ class Menù:
         if not punchline:
             punchline = "Non hai inserito nessun motto, peccato."
 
-        print("Salvataggio delle informazioni")
+        print("Salvataggio delle informazioni...")
         time.sleep(2)
 
         self.utenti_registrati[username] = punchline
         self.registrato = True
 
-        print("Registrazione completata")
+        print("Registrazione completata!")
         time.sleep(1)
-        print(f"Benvenuto giocatore {username}, il tuo motto è: {punchline}, ti auguro buona fortuna!")
+        print(f"Benvenuto giocatore {username}, il tuo motto è: '{punchline}'. Ti auguro buona fortuna!")
 
- 
-    def init(self):
-        self.registrato = False
-        self.utenti_registrati = {}
-        self.opzioni = {
-            "1 -": "Registrati come nuovo utente",
-            "2 -": "Inizia il gioco",
-            "3 -": "Visualizza classifica",
-            "4 -": "Guida ai giochi",
-            "5 -": "Impostazioni profilo",
-            "6 -": "Visualizza record personali",
-            "7 -": "Esci"
-            }
-
-    def mostra_menù(self):
-        print("\ Menù Principale /")
-        for key, value in self.opzioni.items():
-            if key == "2" and not self.registrato:
-                continue
-        print(f"{key} {value}")
-
-    def scegli_opzione(self):
-        scelta = input("Scegli un'opzione dal Menù")
-        if scelta == "1":
-            self.registra_utente()
-        elif scelta == "2" and not self.registrato:
-            print("Devi registrarti prima di iniziare il gioco")
-            return None
-        return scelta
-
-    def registrazione_utente(self):
-        print("Registrazione in corso...")
-        time.sleep(2)
-
-        while True:
-            username = input("Scegli il tuo username: ").lower()
-            if not username:
-                print("Devi necessariamente inserire un username. Riprova.")
-            elif username in self.utenti_registrati:
-                print("Questo username è già presente, scegline un altro.")
-            else:
-                break
-
-        punchline = input("Scegli un tuo motto personale: ").lower()
-        if not punchline:
-            punchline = "Non hai inserito nessun motto, peccato."
-
-        print("Salvataggio delle informazioni")
-        time.sleep(2)
-
-        self.utenti_registrati[username] = punchline
-        self.registrato = True
-
-        print("Registrazione completata")
-        time.sleep(1)
-        print(f"Benvenuto giocatore {username}, il tuo motto è: {punchline}, ti auguro buona fortuna!")
-
+        # Dopo la registrazione, aggiungi l'opzione "Inizia il gioco" al secondo posto
+        self.opzioni.insert(1, ("-", "Inizia il gioco"))
 
 class Utente:
 
@@ -393,23 +339,133 @@ class Saltacavallo(Gioco):
         print(f"\nIl vincitore è il Giocatore {self.giocatori[0]}!")
 
 
+class SetteMezzo(Gioco):
+    def __init__(self):
+        super().__init__("Sette e Mezzo")
+        self.mazzo = self.crea_mazzo()
+
+    def crea_mazzo(self):
+#         [1, 2, 3, 4, 5, 6, 7]: Questa lista rappresenta le carte numeriche da 1 a 7.
+
+# * 4: Questo crea quattro copie di ciascuna carta numerica, 
+# simulando un mazzo di carte con quattro semi (come denari, coppe, spade e bastoni).
+# [0.5]: Questa lista contiene il valore 0.5, che rappresenta le carte figura (Re, Cavallo, Fante).
+
+# * 12: Questo moltiplicatore crea dodici copie del valore 0.5, simulando tre figure per ciascuno dei quattro semi.
+        carte = [1, 2, 3, 4, 5, 6, 7] * 4 + [0.5] * 12
+        random.shuffle(carte)
+        return carte
+    #pop(): È un metodo delle liste in Python che rimuove e restituisce l'ultimo elemento della lista. 
+    # In questo caso, rimuove e restituisce l'ultima carta del mazzo.
+    def pesca_carta(self):
+        return self.mazzo.pop()
+
+    def start(self):
+        print("Benvenuto a 7 e Mezzo!")
+        punteggio_giocatore = 0
+        punteggio_distributore_carte = 0
+
+        # Turno del giocatore
+        while True:
+            carta = self.pesca_carta()
+            punteggio_giocatore += carta
+            print(f"Hai pescato una carta di valore {carta}. Punteggio totale: {punteggio_giocatore}")
+            if punteggio_giocatore > 7.5:
+                print("Hai fallito! Il distributore_carte vince.")
+                return
+            scelta = input("Vuoi pescare un'altra carta? (s/n): ")
+            if scelta.lower() != 's':
+                break
+
+        # Turno del distributore_carte
+        while punteggio_distributore_carte < 5.5:
+            carta = self.pesca_carta()
+            punteggio_distributore_carte += carta
+            print(f"Il distributore_carte ha pescato una carta di valore {carta}. Punteggio totale: {punteggio_distributore_carte}")
+
+        # Determinazione del vincitore
+        if punteggio_distributore_carte > 7.5 or punteggio_giocatore > punteggio_distributore_carte:
+            print("Il giocatore vince!")
+        else:
+            print("Il distributore_carte vince!")
+
+
 class SassoCartaForbici(Gioco):
 
     def __init__(self):
         
         super().__init__("Sasso, Carta o Forbici")
     
+
+    def calcola_punteggio(self, utente, risultato):
+        
+        if risultato == True:
+
+            print("Bravo! 25 punti per te!")
+            utente.aggiungi_punti(25)
+
+        else: 
+
+            print("Peccato! Ti tolgo 10 punti!")
+            utente.aggiungi_punti(-10)
+    
+
     def start(self, utente):
 
-        possibili_scelte_pc = {"Sasso", "Carta", "Forbici"}
+        possibili_scelte_pc = {"sasso", "carta", "forbici"}
         print("Benvenuto a 'Sasso, Carta o Forbici'!")
 
         while True:
 
             scelta_casuale_pc = random.choice(possibili_scelte_pc)
-            scelta_utente = input("Cosa vuoi fare? Sasso, Carta o Forbice?:  ").lower()
+            scelta_utente = input("Cosa vuoi fare? Sasso, Carta o Forbici?:  ").lower()
 
-            pass
+            if scelta_casuale_pc == "sasso" and scelta_utente == "carta":
+
+                print("Hai vinto!")
+                risultato = True
+                self.calcola_punteggio(utente, risultato)
+                break
+
+            elif scelta_casuale_pc == "sasso" and scelta_utente == "forbici":
+
+                print("Hai perso!")
+                risultato = False
+                self.calcola_punteggio(utente, risultato)
+
+                break
+
+            elif scelta_casuale_pc == "carta" and scelta_utente == "forbici":
+
+                print("Hai vinto")
+                risultato = True
+                self.calcola_punteggio(utente, risultato)
+                break
+
+            elif scelta_casuale_pc == "carta" and scelta_utente == "sasso":
+
+                print("Hai perso!")
+                risultato = False
+                self.calcola_punteggio(utente, risultato)
+                break
+
+            elif scelta_casuale_pc == "forbici" and scelta_utente == "carta":
+
+                print("Hai perso!")
+                risultato = False
+                self.calcola_punteggio(utente, risultato)
+                break
+
+            elif scelta_casuale_pc == "forbici" and scelta_utente == "sasso":
+
+                print("Hai vinto!")
+                risultato = True
+                self.calcola_punteggio(utente, risultato)
+                break
+
+            else:
+
+                print("Pareggio! Riprova")
 
 
 
@@ -417,11 +473,19 @@ class SassoCartaForbici(Gioco):
 
 
 
-#Esempio di utilizzo
-gioco1 = IndovinaIlNumero()
-utente = Utente("stefano")
-classifica = Classifica()
-gioco1.start(utente)
+# #Esempio di utilizzo
+# gioco1 = IndovinaIlNumero()
+# utente = Utente("stefano")
+# classifica = Classifica()
+# gioco1.start(utente)
 
 
-        
+# # Esempio
+# menu = Menù()
+
+# while True:
+#     menu.mostra_menù()
+#     scelta = menu.scegli_opzione()
+    
+#     if scelta == "esci":
+#         break
