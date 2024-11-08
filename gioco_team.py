@@ -85,6 +85,7 @@ class Menù:
         # Dopo la registrazione, aggiungi l'opzione "Inizia il gioco" al secondo posto
         self.opzioni.insert(1, ("-", "Inizia il gioco"))
 
+
 class Utente:
 
     def __init__(self, nome):
@@ -166,8 +167,6 @@ class Classifica:
 
         with open("dizionario.json", "w") as file:
             json.dump(self.__get_classifica(), file, indent=4)
-
-
 
 
 class Gioco(ABC):
